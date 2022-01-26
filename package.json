@@ -1,0 +1,25 @@
+{
+  "name": "et-employeemanager",
+  "version": "1.0.0",
+  "description": "CLI Employee Manager CMS applicaiton ",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ernestotham/ET-EmployeeManager.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ernestotham/ET-EmployeeManager/issues"
+  },
+  "homepage": "https://github.com/ernestotham/ET-EmployeeManager#readme",
+  "dependencies": {
+    "dotenv": "^14.3.2",
+    "inquirer": "^8.2.0",
+    "mysql2": "^2.3.3"
+  }
+}
