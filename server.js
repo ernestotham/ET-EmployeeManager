@@ -31,8 +31,8 @@ const dbPool = mysql.createPool(
         // MySQL password
         password: process.env.DB_PASS,
         waitForConnections: true,
-        connectionLimit: 10,
-        queueLimit: 0
+        connectionLimit: 20,
+        queueLimit: 10
     },
     console.log(`Connecting to the ${process.env.DB_NAME} database.`)
 );
@@ -49,26 +49,14 @@ dbPool.getConnection(function (err, conn) {
     //create DB schema
     const schema = ((fs.readFileSync('./db/schema.sql', 'utf-8')).replace(/(\r\n|\n|\r)/gm, "")).split(";")
 
-    for (var i = 0; i < schema.length; i++) {
+    schema.forEach(query => {
 
-        console.log(`${schema[i]};`)
-        if (`${schema[i]};` != ';') {
-
-            conn.query(`${schema[i]};`, function (err, results) {
-                if (err) {
-                    console.log(err)
-                }
-                else {
-                    console.log(results);
-                }
-
-            });
-
-
-
+        if(query != ""){
+        console.log("query: "+query)
+        conn.query(query)
         }
-
-    }
+      })
+  
 
     executeQuery('SELECT * FROM department;', conn)
     var addDepartment = `INSERT INTO department (name)
@@ -86,8 +74,8 @@ VALUES ("accounting"),
               ("Manager", 120, 2),
                      ("Engineer", 130, 2);`
 
-
-
+executeQuery(addDepartment, conn)
+executeQuery('SELECT * FROM department;', conn)
     //////////////////////////////////
 
 
