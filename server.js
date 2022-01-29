@@ -1,5 +1,7 @@
 //import ENV variables
 require('dotenv').config();
+const {QueryAllDepartments, QueryAllEmployees, QueryAllRoles, AddDepartment, AddRole, AddEmployee, UpdateEmployeeRole} = require('./queries')
+const {taskQuestions, addDepartmentQ, addEmployeeQ, addRoleQ} = require('./questions')
 fs = require('fs');
 
 const inquirer = require("inquirer");
@@ -59,25 +61,29 @@ dbPool.getConnection(function (err, conn) {
   
 
     executeQuery('SELECT * FROM department;', conn)
-    var addDepartment = `INSERT INTO department (name)
-VALUES ("accounting"),
-("accounting2"),
-       ("tax");`
+//     var addDepartment = `INSERT INTO department (name)
+// VALUES ("accounting"),
+// ("accounting2"),
+//        ("tax");`
 
-    var addEmployee = `INSERT INTO department (first_name, last_name,role_id,department_id)
-       VALUES ("Juan","Perez",1,1),
-       ("Matt","Jones",2,3),
-       ("Nico","Tham",3,2);`
+//     var addEmployee = `INSERT INTO department (first_name, last_name,role_id,department_id)
+//        VALUES ("Juan","Perez",1,1),
+//        ("Matt","Jones",2,3),
+//        ("Nico","Tham",3,2);`
 
-    var addRole = `INSERT INTO department (title, salary, department_id)
-              VALUES ("accountant", 90, 1),
-              ("Manager", 120, 2),
-                     ("Engineer", 130, 2);`
+//     var addRole = `INSERT INTO department (title, salary, department_id)
+//               VALUES ("accountant", 90, 1),
+//               ("Manager", 120, 2),
+//                      ("Engineer", 130, 2);`
 
-executeQuery(addDepartment, conn)
-executeQuery('SELECT * FROM department;', conn)
-    //////////////////////////////////
+// executeQuery(addDepartment, conn)
+// executeQuery('SELECT * FROM department;', conn)
+//     //////////////////////////////////
+// var AddTest = AddDepartment(conn, "testDepartment" )
+//       console.log(AddTest)
 
+
+//       executeQuery('SELECT * FROM department;', conn)
 
     dbPool.releaseConnection(conn)
 
@@ -85,25 +91,20 @@ executeQuery('SELECT * FROM department;', conn)
 
 
 
-function executeQuery(command, conn) {
+// function executeQuery(command, conn) {
 
-    conn.query(command, function (err, results) {
-        if (err) {
-            console.log(err)
-        }
-        else {
-            console.log(results);
-        }
+//     conn.query(command, function (err, results) {
+//         if (err) {
+//             console.log(err)
+//         }
+//         else {
+//             console.log(results);
+//         }
 
-    });
+//     });
 
-}
+// }
 
-
-
-
-
-  //.replace(/(\r\n|\n|\r)/gm, "")
 
 
 

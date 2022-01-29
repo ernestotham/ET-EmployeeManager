@@ -75,3 +75,4 @@ const addEmployeeQ = [
 
 ]
 
+module.exports = {taskQuestions, addDepartmentQ, addEmployeeQ, addRoleQ}
