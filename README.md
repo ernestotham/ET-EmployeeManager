@@ -61,5 +61,9 @@ Github profile: @Ernestotha
 
 For any questions reach out to me at ernestotha@gmail.com
 
+##Demo picture:
+![EmployeeManager](https://user-images.githubusercontent.com/23125242/151691930-7894c692-9830-4e45-856f-c8ee2122a454.jpg)
 
 
+##Demo video:
+https://watch.screencastify.com/v/VkDnfHubwJtXFOf7rUoR
