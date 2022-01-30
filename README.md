@@ -54,7 +54,7 @@ NA
 
 ## <a id=Questions> Questions </a> 
 
-Github profile: @Ernestotha 
+Github profile: @Ernestotham 
 
 
 
