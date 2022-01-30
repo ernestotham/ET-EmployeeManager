@@ -7,9 +7,9 @@ fs = require('fs');
 const inquirer = require("inquirer");
 
 //DB functions
-const { QueryAllDepartments, QueryManagers, QueryAllEmployees, QueryAllRoles, AddDepartment, AddRole, AddEmployee, UpdateEmployeeRole } = require('./queries')
+const { QueryAllDepartments, QueryAllEmployees, QueryAllRoles, AddDepartment, AddRole, AddEmployee, UpdateEmployeeRole } = require('./queries')
 //Inquire Questions
-const { TaskQuestions, AddDepartmentQuestions, AddEmployeeQuestions, AddRoleQuestions } = require('./questions')
+const { TaskQuestions, AddDepartmentQuestions, AddEmployeeQuestions, AddRoleQuestions, UpdateEmployeeRoleQuestions } = require('./questions')
 
 
 // Import and require mysql2
@@ -61,53 +61,12 @@ dbPool.getConnection(function (err, conn) {
         }
     })
 
-
-    //test queries
-    //     executeQuery('SELECT * FROM department;', conn)
-    //     var addDepartment = `INSERT INTO department (name)
-    // VALUES ("accounting"),
-    // ("accounting2"),
-    //        ("tax");`
-
-    //     var addEmployee = `INSERT INTO department (first_name, last_name,role_id,department_id)
-    //        VALUES ("Juan","Perez",1,1),
-    //        ("Matt","Jones",2,3),
-    //        ("Nico","Tham",3,2);`
-
-    //     var addRole = `INSERT INTO department (title, salary, department_id)
-    //               VALUES ("accountant", 90, 1),
-    //               ("Manager", 120, 2),
-    //                      ("Engineer", 130, 2);`
-
-    // executeQuery(addDepartment, conn)
-    // executeQuery('SELECT * FROM department;', conn)
-    //     //////////////////////////////////
-    //     AddDepartment(conn, "testDepartment" )
-    //     QueryAllDepartments(conn)
-    //     executeQuery('SELECT * FROM department;', conn)
     app = new runApp(conn)
     app.StartInitialQuestions()
 
 
 });
 
-
-
-
-
-// function executeQuery(command, conn) {
-
-//     conn.query(command, function (err, results) {
-//         if (err) {
-//             console.log(err)
-//         }
-//         else {
-//             // console.log(results);
-//         }
-
-//     });
-
-// }
 
 
 class runApp {
@@ -162,9 +121,9 @@ class runApp {
                     let CorpManagers = [];
                     let CoprRoles = [];
                     this.conn.query(command1, function cb(err, res) {
-                        
+
                         for (var i = 0; i < res.length; i++) {
-                            CorpManagers.push({name: `${res[i].first_name} ${res[i].last_name}`, value: res[i].id})
+                            CorpManagers.push({ name: `${res[i].first_name} ${res[i].last_name}`, value: res[i].id })
 
                         }
                         //  CorpManagers
@@ -173,7 +132,7 @@ class runApp {
                     this.conn.query(command2, function cb2(err2, res2) {
 
                         for (var i = 0; i < res2.length; i++) {
-                            CoprRoles.push({name: `${res2[i].title}`, value: res2[i].id})
+                            CoprRoles.push({ name: `${res2[i].title}`, value: res2[i].id })
 
                         }
 
@@ -183,8 +142,8 @@ class runApp {
                         inquirer
                             .prompt(AddEmployeeQuestions(CoprRoles, CorpManagers))
                             .then(val => {
-                                console.log(val);
-                                AddEmployeeQuestions(CoprRoles, CorpManagers)
+                                
+                                // AddEmployeeQuestions(CoprRoles, CorpManagers)
                                 initQ(val)
 
 
@@ -194,10 +153,11 @@ class runApp {
 
                     })
 
-                    const initQ = (val) => { 
+                    const initQ = (val) => {
                         AddEmployee(this.conn, val['employee_fName'], val['employee_lName'], val['roleOpt'], val['managerOpt'])
-                                               
-                        this.StartInitialQuestions(); }
+
+                        this.StartInitialQuestions();
+                    }
 
 
 
@@ -205,7 +165,49 @@ class runApp {
 
                 else if (val['tasks'] == `Update Employee Role`) {
                     //Add function to update role
-                    this.StartInitialQuestions()
+
+                    let command1 = "SELECT first_name, last_name, id FROM employee"
+                    let command2 = "SELECT id, title FROM roles"
+
+                    let CorpEmployees = [];
+                    let CoprRoles = [];
+                    this.conn.query(command1, function cb(err, res) {
+
+                        for (var i = 0; i < res.length; i++) {
+                            CorpEmployees.push({ name: `${res[i].first_name} ${res[i].last_name}`, value: res[i].id })
+
+                        }
+                        //  CorpManagers
+                    })
+
+                    this.conn.query(command2, function cb2(err2, res2) {
+
+                        for (var i = 0; i < res2.length; i++) {
+                            CoprRoles.push({ name: `${res2[i].title}`, value: res2[i].id })
+
+                        }
+
+                        inquirer
+                            .prompt(UpdateEmployeeRoleQuestions(CorpEmployees, CoprRoles))
+                            .then(val => {
+                                console.log(val);
+                                initQ(val)
+
+
+                            })
+
+
+
+                    })
+
+                    const initQ = (val) => {
+                        UpdateEmployeeRole(this.conn, val['employee'], val['newRole'])
+
+                        this.StartInitialQuestions();
+                    }
+
+
+                    
                 }
 
                 else if (val['tasks'] == `View All Roles`) {
@@ -222,8 +224,8 @@ class runApp {
                     this.conn.query(command1, function cb(err, res) {
 
                         for (var i = 0; i < res.length; i++) {
-                            CorpDepartments.push(`[${res[i].name},${res[i].id}]`)
-
+                            CorpDepartments.push({name: `${res[i].name}`, value: res[i].id})
+                           
                         }
 
                         inquirer
@@ -231,7 +233,7 @@ class runApp {
                             .then(val => {
                                 console.log(val);
 
-                               
+
                                 initQ(val)
 
 
@@ -240,10 +242,11 @@ class runApp {
 
                     })
 
-                    const initQ = (val) => { 
-                        let dpID = val['departmentOpt'].split(/,|]/)[1]
-                        AddRole(this.conn, val['Role_name'], val['Role_salary'], dpID )
-                        this.StartInitialQuestions(); }
+                    const initQ = (val) => {
+                        let dpID = val['departmentOpt']
+                        AddRole(this.conn, val['Role_name'], val['Role_salary'], dpID)
+                        this.StartInitialQuestions();
+                    }
 
 
 
@@ -276,17 +279,10 @@ class runApp {
                 }
 
 
-
             })
 
 
-
     }
-
-
-
-
-
 
 
 

@@ -85,4 +85,29 @@ function AddEmployeeQuestions (R_Choices, M_Choices) {
 }
 
 
- module.exports = {TaskQuestions, AddDepartmentQuestions, AddEmployeeQuestions, AddRoleQuestions}
+
+function UpdateEmployeeRoleQuestions (E_Choices, R_Choices) {
+
+    return addEmployeeQ = [
+ 
+         {
+             type: 'list',
+             name: 'employee',
+             message: 'Which employee\'s role do you want to update? ',
+             choices: E_Choices,
+         },
+         {
+             type: 'list',
+             name: 'newRole',
+             message: 'Which role do you want to assign the selected employee? ',
+             choices: R_Choices,
+     
+         }
+     
+     
+     ]
+ }
+
+
+
+ module.exports = {TaskQuestions, AddDepartmentQuestions, AddEmployeeQuestions, AddRoleQuestions,UpdateEmployeeRoleQuestions}

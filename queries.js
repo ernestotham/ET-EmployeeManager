@@ -136,7 +136,7 @@ function AddEmployee(conn, E_first_name, E_last_name, E_roles_id, E_manager_id) 
 
 function UpdateEmployeeRole(conn, id, E_roles_id) {
 
-            let command = 'UPDATE employee SET (roles_id = ' + E_roles_id + ') WHERE id = ' + id
+            let command = 'UPDATE employee SET roles_id = ' + E_roles_id + ' WHERE id = ' + id
             conn.query(command, function (err, results) {
                 if (err) {
                     console.log(err)
@@ -146,9 +146,9 @@ function UpdateEmployeeRole(conn, id, E_roles_id) {
                     console.log("Rows affected: " + results.affectedRows);
                     console.log('\n\n')
                 }
-
+                return results
             });
-            return results
+            
         }
 
 module.exports = { QueryAllDepartments, QueryAllEmployees, QueryAllRoles, AddDepartment, AddRole, AddEmployee, UpdateEmployeeRole, QueryManagers }
